@@ -66,7 +66,7 @@ public class TwitterProducer {
 		}
 		  if(msg != null)
 			logger.info(msg);
-		  	producer.send(new ProducerRecord<>("twitter_tweets", null, msg), new Callback() {
+		  	producer.send(new ProducerRecord<>("twitter_tweets_1", null, msg), new Callback() {
 
 				@Override
 				public void onCompletion(RecordMetadata metadata, Exception exception) {
@@ -86,7 +86,7 @@ public class TwitterProducer {
 		Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);
 		StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
 		// Optional: set up some followings and track terms
-		List<String> terms = Lists.newArrayList("#botadagostosa");
+		List<String> terms = Lists.newArrayList("#norliv");
 		hosebirdEndpoint.trackTerms(terms);
 
 		// These secrets should be read from a config file

@@ -21,9 +21,14 @@ import org.elasticsearch.common.xcontent.XContentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.JsonParser;
+
 
 public class ElasticSearchConsumer {
 
+	@SuppressWarnings("deprecation")
+	private static JsonParser jsonParser = new JsonParser(); 
+	
 	public static RestHighLevelClient createClient() {
 		
 		RestHighLevelClient client = new RestHighLevelClient(
@@ -60,26 +65,39 @@ public class ElasticSearchConsumer {
 				
 	}
 	
+	
+	@SuppressWarnings("deprecation")
+	private static String extractIdFromTweet(String tweetJson){
+		return jsonParser.parse(tweetJson)
+				.getAsJsonObject()
+				.get("id_str")
+				.getAsString();
+
+	}
+	
 	public static void main(String[] args) throws IOException {
 		Logger logger = LoggerFactory.getLogger(ElasticSearchConsumer.class.getName());
 		RestHighLevelClient client = createClient();
 		
-		KafkaConsumer<String, String> consumer = createConsumer("twitter_tweets");
+		KafkaConsumer<String, String> consumer = createConsumer("twitter_tweets_1");// O tópico em que o Consumer se inscreveu para ler
 		
 		while(true){
 			ConsumerRecords<String, String> records =
 				consumer.poll(Duration.ofMillis(100));
 			for(ConsumerRecord<String, String> record : records){
-				if(record != null){
+				
+				if(record.value() != null){
+					String id_tweet = extractIdFromTweet(record.value()); // O id que será usado para que o processamento de mensagens seja indepotente
+					
 					@SuppressWarnings("deprecation")
 					IndexRequest indexRequest = new IndexRequest(
-							"twitter", "tweets"
+							"twitter_teste", "tweets", id_tweet
 							).source(record.value(), XContentType.JSON);
 					
 					IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
-					String id = indexResponse.getId();
-					logger.info(id);
+					logger.info(indexResponse.getId());	
 				}
+				
 			}
 		}
 		
