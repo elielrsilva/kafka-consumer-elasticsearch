@@ -13,7 +13,7 @@ This is a small project that I build while I was studying Apache Kafka. In this 
 
 [Twitter Stream API](https://developer.twitter.com/en/docs/tutorials/consuming-streaming-data)
 
-## What is Apache (very resumed)
+## What is Apache Kafka? (very resumed)
 
 Apache Kafka is a distributed stream processing platform. In other words, this platform allows you to get data
 from a source (a Rest API, a sensor, ...), to process it and send it to a consumer system. Apache Kafka is known as a distributed stream processing platform because of the capabilities described below:
@@ -26,7 +26,7 @@ from a source (a Rest API, a sensor, ...), to process it and send it to a consum
 
 To make easier to understand how does Apache Kafka works, I will resume it in this way:
 
-1) A message is **produced** in a data source and it is sent through a **Kafka Producer**. In this project, the Data Source is the Twitter Stream API and the [TwitterProducer.java](src\main\java\com\github\elielodeveloper\producer\TwitterProducer.java)
+1) A message is **produced** in a data source and it is sent through a **Kafka Producer**. In this project, the Data Source is the Twitter Stream API and the [TwitterProducer.java](https://github.com/elielodeveloper/kafka-consumer-elasticsearch/blob/master/src/main/java/com/github/elielodeveloper/producer/TwitterProducer.java)
 
 2) This message will be stored logically in a **Kafka Topic**.
 
@@ -40,3 +40,38 @@ I strongly recommend to read these 2 other links to have a better understanding 
 - https://kafka.apache.org/intro
 
 ## How to run the project?
+
+First of all, make sure you have all the dependencies, described before installing and running. Clone/download the project into your local machine. Also, it is important to have your environment ready to run a Maven project.
+
+After cloning the project, go to the [Twitter's developer](https://developer.twitter.com/en/apply-for-access) account and apply for a developer account. With your developer's account properly set, create a new application to get your API credentials. Paste it at [TwitterProducer.java](https://github.com/elielodeveloper/kafka-consumer-elasticsearch/blob/master/src/main/java/com/github/elielodeveloper/producer/TwitterProducer.java)
+
+![credentials](https://user-images.githubusercontent.com/22660678/74614396-55ce9400-50f6-11ea-8af9-e22664e41842.PNG)
+
+```java
+private String consumerKey="";
+private String consumerSecret= "";
+private String token = "";
+private String secret = "";
+```
+
+Also, check if the values to connect with Elasticsearch are properly set with your environment
+
+```java
+public static RestHighLevelClient createClient() {
+    
+    RestHighLevelClient client = new RestHighLevelClient(
+        RestClient.builder(
+            new HttpHost("localhost", 9200, "http"),
+            new HttpHost("localhost", 9201, "http")));
+    
+    return client;
+}
+.
+.
+.
+.
+public static KafkaConsumer<String, String> createConsumer(String topic){
+    //settings values
+    String bootstrapServers = "127.0.0.1:9092";
+    String groupId = "kafka-demo-elasticsearch";
+```
