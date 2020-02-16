@@ -13,6 +13,30 @@ This is a small project that I build while I was studying Apache Kafka. In this 
 
 [Twitter Stream API](https://developer.twitter.com/en/docs/tutorials/consuming-streaming-data)
 
-## Kafka Conceitos Básicos
+## What is Apache (very resumed)
 
-Apache Kafka is a distributed stream processing platform. In other words,  
+Apache Kafka is a distributed stream processing platform. In other words, this platform allows you to get data
+from a source (a Rest API, a sensor, ...), to process it and send it to a consumer system. Apache Kafka is known as a distributed stream processing platform because of the capabilities described below:
+
+-  It allows publish and subscribe to streams of records, similar to a message queue or enterprise messaging system.
+
+- Store streams of records in a fault-tolerant durable way.
+
+- Process streams of records as they occur.
+
+To make easier to understand how does Apache Kafka works, I will resume it in this way:
+
+1) A message is **produced** in a data source and it is sent through a **Kafka Producer**. In this project, the Data Source is the Twitter Stream API and the [TwitterProducer.java](src\main\java\com\github\elielodeveloper\producer\TwitterProducer.java)
+
+2) This message will be stored logically in a **Kafka Topic**.
+
+3) So finally, a **Kafka consumer** consumes the message.
+
+![source - https://medium.com/@gabrielqueiroz/o-que-%C3%A9-esse-tal-de-apache-kafka-a8f447cac028](https://miro.medium.com/max/2970/1*q2jYvDNJMS72HgWsOG1f8g.png)
+
+I strongly recommend to read these 2 other links to have a better understanding of Apache Kafka's theory:
+
+- https://medium.com/@gabrielqueiroz/o-que-%C3%A9-esse-tal-de-apache-kafka-a8f447cac028
+- https://kafka.apache.org/intro
+
+## How to run the project?
